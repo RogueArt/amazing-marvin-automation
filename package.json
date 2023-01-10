@@ -1,0 +1,26 @@
+{
+  "name": "amazing-marvin-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": true,
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
+  },
+  "keywords": [],
+  "author": "Rogue Art <rogueart.dev@outlook.com>",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^8.31.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^29.3.1"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
