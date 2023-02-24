@@ -1,5 +1,5 @@
 /**
- * @typedef {Object} Task
+ * @interface Task
  * @property {String} _id - The task's unique ID.  For tasks generated from recurring tasks, this is of the form `${date}-${id}` where date is YYYY-MM-DD and id is the recurring task's id.
  * @property {Number} createdAt - Date.now() when the task was created.
  * @property {Number} updatedAt - Date.now() when the task was last updated.
@@ -82,7 +82,6 @@
  * @property {String} reminder.time - Event time that was used to create the event.
  * @property {Number} reminder.diff - Number of ms before reminder.time when remindAt is scheduled.
  */
-
 export interface Task {
   _id: string
   createdAt: number
@@ -119,7 +118,7 @@ export interface Task {
   subtasks: { [id: string]: object }
   colorBar: null | string
   labelIds: string[]
-  timeestimate: number
+  timeEstimate: number
   note: string
   email: string
   dailySection: string
