@@ -1,62 +1,93 @@
-# Project Title
+# Amazing Marvin Automation
 
-Simple overview of use/purpose.
+Amazing Marvin Automation is designed to streamline and automate specific workflows within the [Amazing Marvin](https://amazingmarvin.com/) productivity app. This project includes a wide range of features from creating tasks based on recorded habits to auto-scheduling tasks based on weather conditions. This tool is ideal for users looking to enhance their productivity and task management efficiency within Amazing Marvin.
 
-## Description
+## Get Started & Initial Setup
 
-An in-depth paragraph about your project and overview of use.
+### Prerequisites
+Verify that these programs are on your computer before proceeding. Otherwise, use these links to download them:
+* [NodeJS v20 or higher](https://nodejs.org/en/download/)
+* [Git (Version Control)](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* A server to host and run this program, ex. [DigitalOcean droplet](https://www.digitalocean.com/), [Heroku Dyno](https://www.heroku.com/), [AWS EC2 instance](https://aws.amazon.com/ec2/instance-types/),
 
-## Getting Started
+**Note:** This application is currently meant to be self-hosted on a server. However, I do have plans to migrating this to be a browser extension as well as figuring out ways to have users be able to use this without having to self-host this.
 
-### Dependencies
+### Installation
+(1) Open a new terminal and first clone this respository from GitHub onto your server:
+```bash
+# Go to the location you want to install to:
+# cd location/to/install/to
+# Clone the project (downloads source code into folder)
+git clone https://github.com/RogueArt/amazing-marvin-automation
+# Go inside the project folder
+cd amazing-marvin-automation
+```
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+(2) Install the required packages to run this project
+```bash
+# Note: make sure Node is installed, otherwise this will not work!
+npm install
+```
 
-### Installing
+(3) Set up the environment variables
+- Rename the file named `.env.template` to `.env`
+- Get your API key: go to Amazing Marvin on web/desktop > Strategies (press S) > API (beta) > Settings > View credentials > Copy paste the value under "API token"
+- Paste this value onto the empty spot where it says `MARVIN_API_TOKEN`
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+(4) Set up Amazing Marvin webhooks
+- Go to API settings in Amazing Marvin (see instructions in #3)
+- Click "Add webhook" and add a webhook for "Record Habit" for "POST"
+- For the webhook address, set this to `https://<your-server-domain-name>:<port>/habit-as-task` and save
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+To run the program, open a terminal and do:
+```bash
+npm run start
 ```
-code blocks for commands
-```
+The program will run on port 8080 as specified under `constants.js`
 
-## Help
+## Issues & Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+If you run into any issues, need help, or have any feature suggestions for this project, feel free to create an issue under the "Issue" tab for this project.
 
-## Authors
+**Important Note:** I am not affiliated with the Amazing Marvin team. For any questions or inquiries about the product, please reach out to the Amazing Marvin team at contact@amazingmarvin.com directly.
 
-Contributors names and contact info
+## Project Features & Status
 
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+<details>
+  <summary>🚧 Simple spaced repetition / follow-ups (In progress)</summary>
 
-## Version History
+  - Finishing a task with certain keywords triggers follow-up tasks.
+  - These tasks are scheduled at intervals of 1d, 3d, 7d, 14d, and 28d from the completion of the original task.
+</details>
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
+<details>
+  <summary>✅ Creating a completed task after recording habit (Completed)</summary>
 
-## License
+  - Allows users to customize the task created after recording a habit.
+  - Example: Recording the habit "Brush teeth in the morning" creates a task "Brush teeth #Self-Care ~10m +Today".
+</details>
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+<details>
+  <summary>❌ Auto-schedule from “Today” list (Not started)</summary>
 
-## Acknowledgments
+  - Automatically slots tasks from the "Today" list into the calendar based on the current time.
+  - Includes an option for adding break periods and working around existing time blocks.
+</details>
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+<details>
+  <summary>❌ Burnout Management (Not started)</summary>
+
+  - Analyzes completed tasks' time estimates and automatically schedules break tasks based on workload.
+  - Follows a general Pomodoro/Flowmodoro ratio for break scheduling.
+</details>
+
+<details>
+  <summary>❌ Weather-Based or Holiday-Based tasks (Not started)</summary>
+
+  - Auto-schedules tasks based on the current weather or upcoming holidays.
+  - Example: Scheduling "clean gutters" if it's going to rain.
+</details>
+
+<!-- Continue adding other sections as needed, following the same format -->
