@@ -5,22 +5,19 @@ import { getDateFormatted } from '../lib/utils';
 
 const router = express.Router();
 
-// 2. Endpoint to handle POST requests at /habit-as-task
 router.post('/habit-as-task', async (req, res) => {
   try {
-    // Extract values to create task from name
     const { parentId, timeEstimate, title, record } = req.body
 
-    // Calculate the current day in Pacific Time Zone
-    const today = getDateFormatted(record.time)
-
-    // Calculate the time zone offset in minutes for Pacific Time
+    // Convert Unix timestamp to YYYY-MM-DD format
+    const recordedDate = getDateFormatted(record.time)
+    // Need timezone offset for accurate recording
     const timeZoneOffset = new Date().getTimezoneOffset();
 
-    // Data for the POST request
-    const postData = {
+    const createTaskData = {
+      // TO-DO: Known issue - "done: true" doesn't mark the task as done
       done: true,
-      day: today,
+      day: recordedDate,
       timeEstimate,
       title,
       parentId,
@@ -28,10 +25,10 @@ router.post('/habit-as-task', async (req, res) => {
       timeZoneOffset: -timeZoneOffset // Inverting the sign because getTimezoneOffset returns the value in opposite sign
     };
 
-    // 3. Axios POST request - Create a task
-    const createTaskResponse = await axios.post(`${CONSTANTS.API_BASE_URL}/addTask`, postData);
+    // (1) Create a task for the habit
+    const createTaskResponse = await axios.post(`${CONSTANTS.API_BASE_URL}/addTask`, createTaskData);
 
-    // 4. Axios POST request - Mark task as done
+    // (2) Mark created task as done
     const createdTask = createTaskResponse.data
     await axios.post(`${CONSTANTS.API_BASE_URL}/markDone`, { itemId: createdTask._id, timeZoneOffset: -timeZoneOffset })
 

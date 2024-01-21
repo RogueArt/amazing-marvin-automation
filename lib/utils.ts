@@ -1,4 +1,4 @@
-export function getDateFormatted(time) {
+export function getDateFormatted(time: number): string {
   // Convert the Unix timestamp to a Date object
   const date = new Date(time);
 
@@ -7,4 +7,9 @@ export function getDateFormatted(time) {
   const day = String(date.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
+}
+
+export function getMarvinTimezoneOffset(date = new Date()): number {
+  // Note: Marvin inverts the sign if it's behind GMT
+  return -date.getTimezoneOffset()
 }
