@@ -8,6 +8,9 @@ const router = express.Router();
 router.post('/habit-as-task', async (req, res) => {
   try {
     const { parentId, timeEstimate, title, record } = req.body
+    if (parentId === CONSTANTS.UNASSIGNED_PARENT_ID) {
+      return res.status(200).json({ message: `Skipping creating a task for habit with name ${title}` })
+    }
 
     // Convert Unix timestamp to YYYY-MM-DD format
     const recordedDate = getDateFormatted(record.time)
