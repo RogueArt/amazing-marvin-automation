@@ -1,6 +1,6 @@
 import express from 'express';
 import axios from 'axios';
-import * as CONSTANTS from '../lib/constants';
+import { UNASSIGNED_PARENT_ID, MarvinEndpoint } from '../lib/constants';
 import { getDateFormatted } from '../lib/utils';
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/habit-as-task', async (req, res) => {
   try {
     const { parentId, timeEstimate, title, record } = req.body
-    if (parentId === CONSTANTS.UNASSIGNED_PARENT_ID) {
+    if (parentId === UNASSIGNED_PARENT_ID) {
       return res.status(200).json({ message: `Skipping creating a task for habit with name ${title}` })
     }
 
@@ -29,11 +29,11 @@ router.post('/habit-as-task', async (req, res) => {
     };
 
     // (1) Create a task for the habit
-    const createTaskResponse = await axios.post(`${CONSTANTS.API_BASE_URL}/addTask`, createTaskData);
+    const createTaskResponse = await axios.post(MarvinEndpoint.ADD_TASK, createTaskData);
 
     // (2) Mark created task as done
     const createdTask = createTaskResponse.data
-    await axios.post(`${CONSTANTS.API_BASE_URL}/markDone`, { itemId: createdTask._id, timeZoneOffset: -timeZoneOffset })
+    await axios.post(MarvinEndpoint.MARK_DONE, { itemId: createdTask._id, timeZoneOffset: -timeZoneOffset })
 
     res.status(200).json({ message: `Successfully created and marked done for task for habit with name ${title}` });
   } catch (error) {
