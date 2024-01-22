@@ -17,6 +17,6 @@ app.use(express.json());
 
 app.use(habitTaskRouter);
 
-app.listen(CONSTANTS.PORT, () => {
-  console.log(`Server is running on port ${CONSTANTS.PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
