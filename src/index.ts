@@ -15,6 +15,16 @@ const app = express();
 app.use(cors({ credentials: true, origin: true, exposedHeaders: '*' }))
 app.use(express.json());
 
+// Set up a general CORS policy
+const corsOptions = {
+  credentials: true,
+  allowedHeaders: 'content-type',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  origin: 'https://app.amazingmarvin.com',
+};
+app.use(cors(corsOptions))
+
+
 app.use(habitTaskRouter);
 
 app.listen(process.env.PORT, () => {
