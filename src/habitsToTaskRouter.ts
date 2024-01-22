@@ -35,6 +35,7 @@ router.post('/habit-as-task', async (req, res) => {
     const createdTask = createTaskResponse.data
     await axios.post(MarvinEndpoint.MARK_DONE, { itemId: createdTask._id, timeZoneOffset: -timeZoneOffset })
 
+    console.log(`Successfully created and marked done for task for habit with name ${title}`)
     res.status(200).json({ message: `Successfully created and marked done for task for habit with name ${title}` });
   } catch (error) {
     console.error(error);
