@@ -3,7 +3,6 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import cors from 'cors'
 import habitTaskRouter from './habitsToTaskRouter'
-import * as CONSTANTS from '../lib/constants'
 
 dotenv.config();
 
@@ -11,8 +10,6 @@ dotenv.config();
 axios.defaults.headers.common['X-API-Token'] = process.env.MARVIN_API_TOKEN;
 
 const app = express();
-// TO-DO: Limit the scope of CORS permissions
-app.use(cors({ credentials: true, origin: true, exposedHeaders: '*' }))
 app.use(express.json());
 
 // Set up a general CORS policy
@@ -25,6 +22,11 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 
+app.get('/', (_, res) => {
+  res.status(200).json({ success: 'Hello Marvin Automation' })
+})
+
+// Routers
 app.use(habitTaskRouter);
 
 app.listen(process.env.PORT, () => {
