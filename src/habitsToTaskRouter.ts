@@ -25,7 +25,7 @@ router.post('/habit-as-task', async (req, res) => {
       title,
       parentId,
       // TO-DO: Handle case for when client and server aren't on same timezone
-      timeZoneOffset: -timeZoneOffset // Inverting the sign because getTimezoneOffset returns the value in opposite sign
+      timeZoneOffset
     };
 
     // (1) Create a task for the habit
@@ -33,7 +33,7 @@ router.post('/habit-as-task', async (req, res) => {
 
     // (2) Mark created task as done
     const createdTask = createTaskResponse.data
-    await axios.post(MarvinEndpoint.MARK_DONE, { itemId: createdTask._id, timeZoneOffset: -timeZoneOffset })
+    await axios.post(MarvinEndpoint.MARK_DONE, { itemId: createdTask._id, timeZoneOffset })
 
     console.log(`Successfully created and marked done for task for habit with name ${title}`)
     res.status(200).json({ message: `Successfully created and marked done for task for habit with name ${title}` });
