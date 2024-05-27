@@ -18,7 +18,6 @@ router.post('/habit-as-task', async (req, res) => {
     const timeZoneOffset = new Date().getTimezoneOffset();
 
     const createTaskData = {
-      // TO-DO: Known issue - "done: true" doesn't mark the task as done
       done: true,
       day: recordedDate,
       timeEstimate,
@@ -28,15 +27,10 @@ router.post('/habit-as-task', async (req, res) => {
       timeZoneOffset
     };
 
-    // (1) Create a task for the habit
-    const createTaskResponse = await axios.post(MarvinEndpoint.ADD_TASK, createTaskData);
+    await axios.post(MarvinEndpoint.ADD_TASK, createTaskData);
 
-    // (2) Mark created task as done
-    const createdTask = createTaskResponse.data
-    await axios.post(MarvinEndpoint.MARK_DONE, { itemId: createdTask._id, timeZoneOffset })
-
-    console.log(`Successfully created and marked done for task for habit with name ${title}`)
-    res.status(200).json({ message: `Successfully created and marked done for task for habit with name ${title}` });
+    console.log(`Successfully added done task for habit with name ${title}`)
+    res.status(200).json({ message: `Successfully added done task for habit with name ${title}` });
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
