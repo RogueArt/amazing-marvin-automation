@@ -9,7 +9,12 @@ export function getDateFormatted(time: number): string {
   return `${year}-${month}-${day}`;
 }
 
+// Default behavior in JS if a timezone is behind GMT, then it has a positive
+// offset, but if it's ahead, it has a negative offset.
+// E.g. UTC-8 has an offset of 480 mins, but UTC+2 will be offset by -120 mins
+//
+// Marvin expects a negative offset (which is logical)
+// for timezones that are behind UTC and positive for ones that are ahead
 export function getMarvinTimezoneOffset(date = new Date()): number {
-  // Note: Marvin inverts the sign if it's behind GMT
   return -date.getTimezoneOffset()
 }

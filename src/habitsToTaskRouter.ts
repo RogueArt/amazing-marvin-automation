@@ -1,7 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import { UNASSIGNED_PARENT_ID, MarvinEndpoint } from '../lib/constants';
-import { getDateFormatted } from '../lib/utils';
+import { getDateFormatted, getMarvinTimezoneOffset } from '../lib/utils';
 
 const router = express.Router();
 
@@ -14,8 +14,7 @@ router.post('/habit-as-task', async (req, res) => {
 
     // Convert Unix timestamp to YYYY-MM-DD format
     const recordedDate = getDateFormatted(record.time)
-    // Need timezone offset for accurate recording
-    const timeZoneOffset = new Date().getTimezoneOffset();
+    const timeZoneOffset = getMarvinTimezoneOffset()
 
     const createTaskData = {
       done: true,
@@ -23,7 +22,6 @@ router.post('/habit-as-task', async (req, res) => {
       timeEstimate,
       title,
       parentId,
-      // TO-DO: Handle case for when client and server aren't on same timezone
       timeZoneOffset
     };
 
@@ -31,7 +29,7 @@ router.post('/habit-as-task', async (req, res) => {
 
     console.log(`Successfully added done task for habit with name ${title}`)
     res.status(200).json({ message: `Successfully added done task for habit with name ${title}` });
-  } catch (error) {
+  } catch (error) { 
     console.error(error);
     res.status(500).send('An error occurred');
   }
