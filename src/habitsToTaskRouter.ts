@@ -7,7 +7,17 @@ const router = express.Router();
 
 router.post('/habit-as-task', async (req, res) => {
   try {
-    const { parentId, timeEstimate, title, record } = req.body
+    switch (req.query.type) {
+      case 'record-habit': await addTaskOnHabitCompletion(req.body, res); break
+    }
+  } catch (error) { 
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+});
+
+async function addTaskOnHabitCompletion(recordedHabitInfo, res) {
+  const { parentId, timeEstimate, title, record } = recordedHabitInfo
     if (parentId === UNASSIGNED_PARENT_ID) {
       return res.status(200).json({ message: `Skipping creating a task for habit with name ${title}` })
     }
@@ -29,9 +39,7 @@ router.post('/habit-as-task', async (req, res) => {
 
     console.log(`Successfully added done task for habit with name ${title}`)
     res.status(200).json({ message: `Successfully added done task for habit with name ${title}` });
-  } catch (error) { 
-    console.error(error);
-    res.status(500).send('An error occurred');
+}
   }
 });
 
