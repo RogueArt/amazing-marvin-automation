@@ -8,6 +8,7 @@ dotenv.config();
 
 // Send API token each time to Marvin
 axios.defaults.headers.common['X-API-Token'] = process.env.MARVIN_API_TOKEN;
+axios.defaults.headers.common['X-Full-Access-Token'] = process.env.MARVIN_FULL_ACCESS_TOKEN;
 
 const app = express();
 app.use(express.json());
