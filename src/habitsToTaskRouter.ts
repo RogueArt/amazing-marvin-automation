@@ -7,6 +7,9 @@ import logger from '../lib/logger'
 const router = express.Router();
 const CSV_REGEX = /\s*,\s*/
 
+// Need this as \n\n\\\ is padded for each empty line on note 
+const MARVIN_WHITESPACE_REGEX = /[\n\\]+$/g
+
 router.post('/habit-as-task', async (req, res) => {
   try {
     switch (req.query.type) {
@@ -119,9 +122,9 @@ async function assignGoalToTask(completedTaskInfo, res) {
 function buildHabitToPatternsMapping(habitInfos) {
   const habitToPatternsMapping: Record<string, string[]> = {}
   for (const { _id, note } of habitInfos) {
-    if (note.length === 0) continue
+    if (note == null || note.length === 0) continue
 
-    const patterns = note.split(CSV_REGEX).map(s => s.toLowerCase())
+    const patterns = note.split(CSV_REGEX).map(s => s.toLowerCase().replace(MARVIN_WHITESPACE_REGEX, ''))
     habitToPatternsMapping[_id] = patterns
   }
   return habitToPatternsMapping
