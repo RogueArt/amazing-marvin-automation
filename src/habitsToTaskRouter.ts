@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import { UNASSIGNED_PARENT_ID, MarvinEndpoint } from '../lib/constants';
 import { getDateFormatted, getMarvinTimezoneOffset } from '../lib/utils';
+import logger from '../lib/logger'
 
 const router = express.Router();
 const CSV_REGEX = /\s*,\s*/
@@ -22,7 +23,7 @@ router.post('/habit-as-task', async (req, res) => {
 async function addTaskOnHabitCompletion(recordedHabitInfo, res) {
   const { parentId, timeEstimate, title, record } = recordedHabitInfo
   if (parentId === UNASSIGNED_PARENT_ID) {
-    return res.status(200).json({ message: `Skipping creating a task for habit with name ${title}` })
+    return res.status(200).json({ message: `Skipping creating a task for habit with name: ${title}` })
   }
 
   // Convert Unix timestamp to YYYY-MM-DD format
@@ -40,8 +41,8 @@ async function addTaskOnHabitCompletion(recordedHabitInfo, res) {
 
   await axios.post(MarvinEndpoint.ADD_TASK, createTaskData);
 
-  console.log(`Successfully added done task for habit with name ${title}`)
-  res.status(200).json({ message: `Successfully added done task for habit with name ${title}` });
+  logger.info(`Successfully added done task for habit with name: ${title}`)
+  res.status(200).json({ message: `Successfully added done task for habit with name: ${title}` });
 }
 
 async function markHabitOnTaskCompletion(completedTaskInfo, res) {
@@ -62,8 +63,8 @@ async function markHabitOnTaskCompletion(completedTaskInfo, res) {
 
   // No tasks to mark complete
   if (habitIdsToMarkComplete.length === 0) {
-    console.log(`No related habits to mark done for task ${title}`)
-    return res.status(200).json({ message: `No related habits to mark done for task ${title}` });
+    logger.info(`No related habits to mark done for task: ${title}`)
+    return res.status(200).json({ message: `No related habits to mark done for task: ${title}` });
   }
 
   // Otherwise, go through and mark all the matched habits as complete
@@ -71,8 +72,8 @@ async function markHabitOnTaskCompletion(completedTaskInfo, res) {
     return axios.post(MarvinEndpoint.UPDATE_HABIT, getRecordHabitData(habitId))
   }))
 
-  console.log(`Successfully marked habits with IDs ${habitIdsToMarkComplete.join(', ')} complete for ${title}`)
-  res.status(200).json({ message: `Successfully added done task for habit with name ${title}` });
+  logger.info(`Successfully marked habits with IDs ${habitIdsToMarkComplete.join(', ')} complete for: ${title}`)
+  res.status(200).json({ message: `Successfully added done task for habit with name: ${title}` });
 }
 
 async function assignGoalToTask(completedTaskInfo, res) {
@@ -94,8 +95,8 @@ async function assignGoalToTask(completedTaskInfo, res) {
 
   // No goal to attach to, skipping
   if (goalIdToAttach === null) {
-    console.log(`No related goals to mark done for task ${title}`)
-    return res.status(200).json({ message: `No related goals to mark done for task ${title}` });
+    logger.info(`No related goals to mark done for task: ${title}`)
+    return res.status(200).json({ message: `No related goals to mark done for task: ${title}` });
   }
 
   // Update task with goal
@@ -111,8 +112,8 @@ async function assignGoalToTask(completedTaskInfo, res) {
   // Update the task with the goal ID
   await axios.post(MarvinEndpoint.UPDATE_DOC, updateTaskData)
 
-  console.log(`Assigned goal ${goalIdToAttach} to task with name ${title}`)
-  res.status(200).json({ message: `Assigned goal ${goalIdToAttach} to habit with name ${title}` });
+  logger.info(`Assigned goal ${goalIdToAttach} to task with name: ${title}`)
+  res.status(200).json({ message: `Assigned goal ${goalIdToAttach} to habit with name: ${title}` });
 }
 
 function buildHabitToPatternsMapping(habitInfos) {
